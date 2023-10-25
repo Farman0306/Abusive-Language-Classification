@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Abusive Language Classification</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .center {
+      text-align: center;
+    }
+    .result-text {
+      font-weight: bold;
+    }
+  </style>
+  <script>
+    $(document).ready(function() {
+      $('form').on('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        var message = $('#message').val(); // Get message from textarea
+        $.ajax({
+          type: 'POST',
+          url: '/predict',
+          data: {message: message},
+          success: function(result) {
+            $('#result-text').text("The tweet given above is considered as:");
+            if (result == "0") {
+              $('#result').text("non-abusive");
+            } else if (result == "1") {
+              $('#result').text("abusive");
+            } else {
+              $('#result-text').text("Error occurred. Please try again.");
+              $('#result').text("");
+            }
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1 class="center">Abusive Language Classification using Machine Learning</h1>
+  <div class="center">
+    <form>
+      <textarea id="message" rows="6" cols="50" placeholder="Enter your message"></textarea><br><br>
+      <input type="submit" value="Classify">
+    </form>
+    <br>
+    <div id="result-text"></div>
+    <div id="result" class="result-text"></div>
+  </div>
+</body>
+</html>
